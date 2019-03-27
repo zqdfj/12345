@@ -1,0 +1,79 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node{  
+                     int data;
+                     int num;
+                     struct node*next;
+                  }linklist;
+                  
+linklist* createlist(int n)
+{
+	linklist*p,*q,*head;
+	int i;
+	int a[n]={3,1,7,2,4,8,4};
+	q=head=p=(linklist*)malloc(sizeof(linklist));
+    p->data=a[0];
+	p->num=1;
+	for(i=1;i<n;i++)
+	{
+		p=(linklist*)malloc(sizeof(linklist));
+		p->num=i+1;
+		p->data=a[i];	
+		q->next=p;
+		q=p;	
+	}
+	p->next=head;
+	return head;
+}
+
+
+int main()
+{
+	int n=7,m=6,i,j,k,a[n];
+	linklist*s,*p,*head,*q;
+	head=createlist(n);
+	p=head;
+	for(i=0;i<n;i++)
+	{
+		if(m==1)
+		{
+			s=p;
+			for(j=1;j<=n;j++)
+			{
+				p=p->next;
+				if(p->next==s)
+				{
+					break;
+				}
+			}
+			q=p->next;
+		    p->next=q->next;
+		    printf("%4d",q->num);
+	     	m=q->data;
+	    	p=q->next;
+		    free(q);	
+		}
+		else
+		{
+			for(j=2;j<m;j++)
+	        {
+	    	    p=p->next;
+	        }
+	    	q=p->next;
+	    	p->next=q->next;
+   	    	printf("%4d",q->num);
+   	    	m=q->data;
+	    	p=q->next;
+	    	free(q);	
+		}
+	}
+	return(0);
+}
+
+                  
+
+
+
+                  
+
