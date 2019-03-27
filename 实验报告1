@@ -1,0 +1,98 @@
+实验报告
+                   电信1809 吴朝晖 U201813478 
+
+需求分析：利用算法解决约瑟夫环问题
+          输入形式 int型 输入值范围 m 20以内 n 未规定
+          输出形式 int型 
+          程序功能 解决约瑟夫环问题
+          测试数据 m=6 n=7 密码依次为3 1 7 2 4 8 4 输出值为6 1 4 7 2 3 5
+
+概要设计：m为初始上限值n为人数 data为 每个人的密码 num为每个人的编号
+          主程序流程：1 设置链表
+2 找到需要删除的节点
+3 输出该节点的编号，重置上限值，删除节点
+4 全部删除后结束
+          调用关系 主函数调用链表设置函数
+
+详细设计：
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node{  
+                     int data;
+                     int num;
+                     struct node*next;
+                  }linklist;
+                  
+linklist* createlist(int n)
+{
+	linklist*p,*q,*head;
+	int i;
+	int a[n]={3,1,7,2,4,8,4};（设置密码）
+	q=head=p=(linklist*)malloc(sizeof(linklist));
+    p->data=a[0];
+	p->num=1;
+	for(i=1;i<n;i++)
+	{
+		p=(linklist*)malloc(sizeof(linklist));
+		p->num=i+1; （依次设置编号）
+		p->data=a[i];	（依次导入密码）
+		q->next=p;
+		q=p;	
+	}
+	p->next=head;
+	return head;
+} (设置链表)
+int main()
+{
+	int n=7,m=6,i,j,k,a[n];
+	linklist*s,*p,*head,*q;
+	head=createlist(n);
+	p=head;
+	for(i=0;i<n;i++)
+	{
+		if(m==1)（m=1时即删除自身）
+		{
+			s=p;
+			for(j=1;j<=n;j++)
+			{
+				p=p->next;
+				if(p->next==s)
+				{
+					break;
+				}
+			}（找到待删除节点的前一个节点）
+			q=p->next;
+		    p->next=q->next;（把待删除节点从链表中移出）
+		    printf("%4d",q->num);（输出待删除节点的编号）
+	     	m=q->data;（重置m值）
+	    	p=q->next;（p指向待删除节点的下一个节点）
+		    free(q);（删除待删除节点）
+		}
+		else
+		{
+			for(j=2;j<m;j++)
+	        {
+	    	    p=p->next;
+	        }
+	    	q=p->next;
+	    	p->next=q->next;
+   	    	printf("%4d",q->num);
+   	    	m=q->data;
+	    	p=q->next;
+	    	free(q);	
+		}(与上文同理)
+	}
+	return(0);
+}
+
+
+调试分析：写完程序后发现运算结果不对，分析后发现忘了重置m值，之后加了上去
+
+使用说明：要修改m, n的话可以直接在程序中改，而data的话直接更改a[n]中的值就好
+
+测试结果：1:   m=6 n=7 a[n]={3,1,7,2,4,8,4} 输出为6 1 4 7 2 3 5
+          2:   m=6 n=7 a[n]={2,2,2,2,2,2,2} 输出为6 1 3 5 2 7 4
+
+附录：带注释的原程序见上文   
+                       
