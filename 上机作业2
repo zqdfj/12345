@@ -1,0 +1,73 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+#define STACK_INIT_SIZE   100
+#define STACKINCREMENT   10
+#define n 4
+
+typedef struct{
+	    int  *base;
+	    int  *top;
+	    int   stacksize;
+              }SqStack;
+
+int initstack(SqStack &S)//创建栈 
+{
+	S.base=(int*)malloc(STACK_INIT_SIZE*sizeof(int));
+	S.top=S.base;
+	S.stacksize=STACK_INIT_SIZE;
+}
+
+int push(SqStack &S,int e)//入栈 
+{
+	if(S.top-S.base>=S.stacksize)
+	{
+		S.base=(int*)realloc(S.base,(S.stacksize+STACKINCREMENT)*sizeof(int));
+		S.top=S.base+S.stacksize;
+		S.stacksize+=STACKINCREMENT;
+	}
+	*(S.top)++=e;
+}
+
+int pop(SqStack &S,int e)//出栈 
+{
+	e=*--S.top;
+	return(e);
+} 
+
+int paixu(SqStack &S,int data, int a[], int i)//data为车厢序号，a[]储存不同的排序， 
+{
+	int temp,j,q;
+	if(data<n)
+	{
+		push(S,data+1);//先把所有序号全部进栈 
+		paixu(S,data+1,a,i);
+		pop(S,q);	
+	}
+	if(S.base!=S.top)//出栈并排序 
+	{
+		temp=pop(S,q);
+		a[i]=temp;//储存各种排序 
+		i++;
+		paixu(S,data,a,i);
+		push(S,temp);		
+	}
+	if(data==n&&S.base==S.top)
+	{
+		for(j=0;j<i;j++)
+		{
+		printf("%4d",a[j]);//输出 
+		}
+		printf("\n");
+	}
+	
+}
+int main()
+{
+	SqStack S;
+	int a[STACK_INIT_SIZE];
+	initstack(S);
+	push(S,1);
+	paixu(S,1,a,0);
+}
